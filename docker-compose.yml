@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  mongodb:
+    image: mongo:7
+    container_name: hso-tap-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: hsotap
+      MONGO_INITDB_ROOT_PASSWORD: changeme
+      MONGO_INITDB_DATABASE: hsotap
+    volumes:
+      - mongo_data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    container_name: hso-tap-mongo-ui
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: hsotap
+      ME_CONFIG_MONGODB_ADMINPASSWORD: changeme
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:

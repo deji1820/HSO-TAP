@@ -1,0 +1,40 @@
+import mongoose from "mongoose";
+
+/**
+ * Live queue row — created the moment a student finishes the kiosk flow
+ * (only for "Clinic Consultation" / "Other Services", or a "Self-Service"
+ * screening that got overridden due to abnormal vitals).
+ * This is what the Live Nurse/Doctor Dashboard subscribes to over Socket.IO.
+ */
+const queueEntrySchema = new mongoose.Schema(
+  {
+    student: { type: mongoose.Schema.Types.ObjectId, ref: "Student", required: true, index: true },
+    queueNumber: String, // e.g. "R0003", "M0001"
+    priorityLevel: { type: String, enum: ["High Priority", "Standard Priority", "Routine Check"], required: true },
+    serviceType: {
+      type: String,
+      enum: [
+        "Quick Health Screening",
+        "Medical Consultation",
+        "Dental Consultation",
+        "Medical Clearance",
+        "Prescription/OTC Pickup",
+        "General Inquiry",
+      ],
+      required: true,
+    },
+    reason: String, // short label shown in the queue list, e.g. "High Temperature"
+    status: {
+      type: String,
+      enum: ["waiting", "called", "in_session", "completed", "cancelled"],
+      default: "waiting",
+    },
+    linkedVitals: { type: mongoose.Schema.Types.ObjectId, ref: "VitalsLog" },
+    calledAt: Date,
+    startedAt: Date,
+    completedAt: Date,
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("QueueEntry", queueEntrySchema);
