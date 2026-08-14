@@ -10,8 +10,10 @@ import CheckedInScreen from "./screens/CheckedInScreen.jsx";
 import ScreeningOptionsScreen from "./screens/ScreeningOptionsScreen.jsx";
 import CapturingScreen from "./screens/CapturingScreen.jsx";
 import ResultScreen from "./screens/ResultScreen.jsx";
+import OfflineScreen from "./screens/OfflineScreen.jsx";
 import { connectDeviceBridge } from "./services/deviceBridge.js";
 import { lookupStudent, submitIntake } from "./services/api.js";
+import { startHealthMonitor } from "./services/healthCheck.js";
 
 const IDLE_TIMEOUT_MS = 20_000;
 const isMock = import.meta.env.VITE_MOCK_HARDWARE === "true";
@@ -30,6 +32,7 @@ export default function App() {
   const [readings, setReadings] = useState({});
   const [overrideTriggered, setOverrideTriggered] = useState(false);
   const [resultQueueNumber, setResultQueueNumber] = useState(null);
+  const [isOnline, setIsOnline] = useState(true);
 
   // Which multi-step flow is currently in progress — determines what
   // finishCapture() submits and where it routes afterwards. Only relevant
@@ -44,6 +47,7 @@ export default function App() {
   const idleTimer = useRef(null);
   const stepRef = useRef(step);
   const submittingRef = useRef(false); // guards against double-submit
+  const preOfflineStepRef = useRef("welcome"); // step to restore once back online
 
   useEffect(() => { stepRef.current = step; }, [step]);
 
@@ -51,6 +55,25 @@ export default function App() {
     bridgeRef.current = connectDeviceBridge(handleDeviceEvent);
     if (isMock) window.hsotapBridge = bridgeRef.current; // dev console access
     return () => bridgeRef.current?.close();
+  }, []);
+
+  // Offline Fallback Protocol (PROJECT-OVERVIEW.pdf): runs independently of
+  // whichever screen is showing. On going offline, remembers the current
+  // step and forces the "offline" screen; on recovery, if the student had
+  // gotten partway through a flow, we deliberately reset to "welcome"
+  // rather than silently resuming mid-transaction with possibly-stale
+  // student/session state.
+  useEffect(() => {
+    const stop = startHealthMonitor((online) => {
+      setIsOnline(online);
+      if (!online) {
+        preOfflineStepRef.current = stepRef.current;
+        setStep("offline");
+      } else if (stepRef.current === "offline") {
+        resetSession();
+      }
+    });
+    return stop;
   }, []);
 
   // Watches `readings` (the real source of truth, not a ref) and fires the
@@ -180,11 +203,15 @@ export default function App() {
   // silently losing data without mention.
   async function handleRequestTextSubmit(text) {
     const serviceType = otherServiceSubType === "Prescription/OTC" ? "Prescription/OTC Pickup" : "General Inquiry";
+    // `reason` is the short label shown in staff's queue list (kept truncated
+    // for scannability); `requestDetails` is the full, untruncated text and
+    // is what actually gets persisted long-term — see QueueEntry.requestDetails.
     const reason = text.length > 60 ? `${text.slice(0, 57)}...` : text;
     const result = await submitIntake({
       studentId: student.studentId,
       serviceType,
       reason,
+      requestDetails: text,
       source: "kiosk",
     });
     setCheckInInfo({ serviceType, queueNumber: result?.queueEntry?.queueNumber });
@@ -234,7 +261,9 @@ export default function App() {
   }
 
   return (
-    <div onClick={resetIdleTimer}>
+    <div onClick={isOnline ? resetIdleTimer : undefined}>
+      {step === "offline" && <OfflineScreen />}
+
       {step === "welcome" && <WelcomeScreen onManualEntry={() => setStep("manual")} />}
 
       {step === "manual" && (

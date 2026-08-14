@@ -24,6 +24,7 @@ const queueEntrySchema = new mongoose.Schema(
       required: true,
     },
     reason: String, // short label shown in the queue list, e.g. "High Temperature"
+    requestDetails: String, // full free-text request (e.g. Prescription/OTC or General Inquiry details) — `reason` above is just a short display label, this is the durable record staff read
     status: {
       type: String,
       enum: ["waiting", "called", "in_session", "completed", "cancelled"],

@@ -21,7 +21,7 @@ function classifyBmi(bmi) {
  */
 export async function submitIntake(req, res) {
   const io = req.app.get("io");
-  const { studentId, serviceType, reason, temperatureC, heightCm, weightKg, source } = req.body;
+  const { studentId, serviceType, reason, requestDetails, temperatureC, heightCm, weightKg, source } = req.body;
 
   const student = await Student.findOne({ studentId });
   if (!student) return res.status(404).json({ message: "Unknown student" });
@@ -56,6 +56,7 @@ export async function submitIntake(req, res) {
       priorityLevel: isFeverFlagged ? "High Priority" : isSelfService ? "Routine Check" : "Standard Priority",
       serviceType,
       reason: isFeverFlagged ? "High Temperature" : reason,
+      requestDetails,
       linkedVitals: vitals._id,
     });
     io?.emit("queue:new", queueEntry); // pushes to Live Nurse/Doctor Dashboard in real time
