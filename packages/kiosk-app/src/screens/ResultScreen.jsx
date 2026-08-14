@@ -4,7 +4,7 @@ function computeBmi(heightCm, weightKg) {
   return +(weightKg / (m * m)).toFixed(1);
 }
 
-export default function ResultScreen({ readings, overrideTriggered, onDone }) {
+export default function ResultScreen({ readings, overrideTriggered, queueNumber, onDone }) {
   const bmi = computeBmi(readings.heightCm, readings.weightKg);
 
   return (
@@ -13,6 +13,7 @@ export default function ResultScreen({ readings, overrideTriggered, onDone }) {
         <>
           <h1 style={{ color: "#c0392b" }}>Please proceed inside the clinic immediately.</h1>
           <p>An abnormal temperature was detected. A staff member has been notified.</p>
+          {queueNumber && <p className="queue-number">Queue Number: {queueNumber}</p>}
         </>
       ) : (
         <h1>All done — here's your reading</h1>

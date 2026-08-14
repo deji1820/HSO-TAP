@@ -1,6 +1,7 @@
 import Student from "../models/Student.js";
 import VitalsLog from "../models/VitalsLog.js";
 import QueueEntry from "../models/QueueEntry.js";
+import { nextQueueNumber } from "../services/queueNumbering.service.js";
 
 const FEVER_THRESHOLD_C = 37.5; // see docs/ARCHITECTURE.md for the decision-support rule
 
@@ -51,7 +52,7 @@ export async function submitIntake(req, res) {
   if (needsQueueEntry) {
     queueEntry = await QueueEntry.create({
       student: student._id,
-      queueNumber: undefined, // assign via your preferred numbering scheme (per-service counters)
+      queueNumber: await nextQueueNumber(serviceType),
       priorityLevel: isFeverFlagged ? "High Priority" : isSelfService ? "Routine Check" : "Standard Priority",
       serviceType,
       reason: isFeverFlagged ? "High Temperature" : reason,

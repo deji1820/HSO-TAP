@@ -28,7 +28,7 @@ export default function DashboardPage() {
       <ul>
         {queue.map((entry) => (
           <li key={entry._id}>
-            {entry.priorityLevel} — {entry.student?.firstName} {entry.student?.lastName} — {entry.reason}
+            {entry.queueNumber && <strong>{entry.queueNumber}</strong>} {entry.priorityLevel} — {entry.student?.firstName} {entry.student?.lastName} — {entry.reason}
             <button onClick={() => updateQueueStatus(entry._id, "in_session")}>Start</button>
           </li>
         ))}

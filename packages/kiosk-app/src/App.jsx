@@ -29,6 +29,7 @@ export default function App() {
   const [captureMode, setCaptureMode] = useState(null); // "complete" | "temperature" | "physical"
   const [readings, setReadings] = useState({});
   const [overrideTriggered, setOverrideTriggered] = useState(false);
+  const [resultQueueNumber, setResultQueueNumber] = useState(null);
 
   // Which multi-step flow is currently in progress — determines what
   // finishCapture() submits and where it routes afterwards. Only relevant
@@ -78,6 +79,7 @@ export default function App() {
     setCaptureMode(null);
     setReadings({});
     setOverrideTriggered(false);
+    setResultQueueNumber(null);
     setFlowType(null);
     setConsultSubType(null);
     setOtherServiceSubType(null);
@@ -223,6 +225,7 @@ export default function App() {
         weightKg: finalReadings.weightKg,
       });
       setOverrideTriggered(!!result.overrideTriggered);
+      setResultQueueNumber(result.queueEntry?.queueNumber ?? null);
       setStep("result");
     } catch {
       alert("Something went wrong saving your reading. Please try again or see the front desk.");
@@ -277,7 +280,7 @@ export default function App() {
       )}
 
       {step === "result" && (
-        <ResultScreen readings={readings} overrideTriggered={overrideTriggered} onDone={resetSession} />
+        <ResultScreen readings={readings} overrideTriggered={overrideTriggered} queueNumber={resultQueueNumber} onDone={resetSession} />
       )}
     </div>
   );

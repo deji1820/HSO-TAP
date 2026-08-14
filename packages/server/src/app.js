@@ -7,6 +7,7 @@ import studentsRoutes from "./routes/students.routes.js";
 import kioskRoutes from "./routes/kiosk.routes.js";
 import queueRoutes from "./routes/queue.routes.js";
 import formsRoutes from "./routes/forms.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
 
 export function createApp() {
   const app = express();
@@ -22,6 +23,7 @@ export function createApp() {
   app.use("/api/kiosk", kioskRoutes);
   app.use("/api/queue", queueRoutes);
   app.use("/api/forms", formsRoutes);
+  app.use("/api/analytics", analyticsRoutes);
 
   return app;
 }

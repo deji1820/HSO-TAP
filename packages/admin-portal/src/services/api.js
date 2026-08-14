@@ -16,3 +16,4 @@ export const getFullEmr = (id) => api.get(`/students/${id}/emr`).then((r) => r.d
 export const bulkUpload = (rows, mode) => api.post("/students/bulk-upload", { rows, mode }).then((r) => r.data);
 export const getFormPipelines = () => api.get("/forms").then((r) => r.data);
 export const getSyncLog = () => api.get("/forms/sync-log").then((r) => r.data);
+export const getAnalyticsSummary = (days) => api.get("/analytics/summary", { params: { days } }).then((r) => r.data);
