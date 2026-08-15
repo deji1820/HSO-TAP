@@ -1,14 +1,10 @@
 import { useState } from "react";
+import KioskHeader from "../components/KioskHeader.jsx";
+import "../styles/screens/ManualEntry.css";
 
-// Matches PDF screen: "Manual Entry" — numeric keypad for students without
-// (or whose) RFID card doesn't read.
-//
-// ASSUMPTION (flag for review against the actual mockup): student IDs follow
-// the "YYYY-NNNNNN" pattern seen in scripts/seedStudent.js (e.g.
-// "2024-100123") — 4-digit year, dash, 6-digit sequence, 10 digits total.
-// The dash is inserted automatically as the student types; Continue is
-// disabled until all 10 digits are entered. If the real format differs,
-// adjust MAX_DIGITS / formatId below.
+// Matches PDF screen: "Manual Student ID Entry" — numeric keypad.
+// Student IDs follow the "YYYY-NNNNNN" pattern (10 digits total);
+// the dash is inserted automatically as the student types.
 const MAX_DIGITS = 10;
 const DASH_AFTER = 4;
 
@@ -17,9 +13,23 @@ function formatId(digits) {
   return `${digits.slice(0, DASH_AFTER)}-${digits.slice(DASH_AFTER)}`;
 }
 
-const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "clear", "0", "back"];
+// Ordered to match the PDF grid exactly: 1 2 3 ⌫ / 4 5 6 CLEAR / 7 8 9 0
+const KEYS = [
+  { key: "1", label: "1" },
+  { key: "2", label: "2" },
+  { key: "3", label: "3" },
+  { key: "back", label: "⌫", variant: "danger" },
+  { key: "4", label: "4" },
+  { key: "5", label: "5" },
+  { key: "6", label: "6" },
+  { key: "clear", label: "CLEAR", variant: "warning" },
+  { key: "7", label: "7" },
+  { key: "8", label: "8" },
+  { key: "9", label: "9" },
+  { key: "0", label: "0" },
+];
 
-export default function ManualEntryScreen({ onSubmit, onCancel }) {
+export default function ManualEntryScreen({ onSubmit, onCancel, isOnline }) {
   const [digits, setDigits] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -44,8 +54,6 @@ export default function ManualEntryScreen({ onSubmit, onCancel }) {
     setError(null);
     try {
       await onSubmit(formatId(digits));
-      // On success the parent switches `step` away from "manual", so this
-      // component unmounts — no need to clear loading here.
     } catch {
       setError("Student ID not found. Please check the number and try again, or ask the front desk for help.");
       setLoading(false);
@@ -53,34 +61,53 @@ export default function ManualEntryScreen({ onSubmit, onCancel }) {
   }
 
   return (
-    <div className="screen manual-entry-screen">
-      <h1>Manual Entry</h1>
-      <p>Enter your Student ID number</p>
+    <div className="kiosk-shell">
+      <KioskHeader isOnline={isOnline} />
 
-      <div className="id-display">{formatId(digits) || "—"}</div>
+      <div className="kiosk-content">
+        <div className="manual-entry-card">
+          <div className="manual-entry-titlebar">
+            <span>Manual Student ID Entry</span>
+            <button className="manual-entry-close" onClick={onCancel} disabled={loading} aria-label="Close">
+              ✕
+            </button>
+          </div>
 
-      {error && <p className="error-text">{error}</p>}
-      {loading && <p>Looking up student…</p>}
+          <div className="manual-entry-body">
+            <div className="manual-entry-label-row">
+              <span className="field-label-kiosk">Student ID:</span>
+              <span className="manual-entry-format-badge">Format: YYYY-NNNNNN</span>
+            </div>
 
-      <div className="keypad">
-        {KEYS.map((key) => (
-          <button
-            key={key}
-            className="keypad-key"
-            onClick={() => pressKey(key)}
-            disabled={loading}
-          >
-            {key === "back" ? "⌫" : key === "clear" ? "Clear" : key}
-          </button>
-        ))}
+            <div className="id-display">{formatId(digits) || "—"}</div>
+
+            {error && <p className="manual-entry-error">{error}</p>}
+            {loading && <p className="manual-entry-loading">Looking up student…</p>}
+
+            <div className="keypad">
+              {KEYS.map(({ key, label, variant }) => (
+                <button
+                  key={key}
+                  className={"keypad-key" + (variant ? ` keypad-key-${variant}` : "")}
+                  onClick={() => pressKey(key)}
+                  disabled={loading}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="manual-entry-actions">
+              <button className="btn-kiosk btn-kiosk-muted manual-entry-cancel" onClick={onCancel} disabled={loading}>
+                Cancel
+              </button>
+              <button className="btn-kiosk btn-kiosk-primary manual-entry-confirm" onClick={handleContinue} disabled={!canSubmit}>
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <button onClick={handleContinue} disabled={!canSubmit}>
-        Continue
-      </button>
-      <button onClick={onCancel} disabled={loading}>
-        Back
-      </button>
     </div>
   );
 }

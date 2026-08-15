@@ -1,0 +1,68 @@
+.kiosk-header {
+  height: var(--header-h);
+  background: var(--nu-blue);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  flex-shrink: 0;
+}
+
+.kiosk-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.kiosk-header-crest {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: var(--nu-gold);
+  color: var(--nu-blue-dark);
+  font-weight: 800;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.kiosk-header-title {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.3px;
+}
+
+.kiosk-header-subtitle {
+  color: #c3cfe8;
+  font-size: 0.82rem;
+}
+
+.kiosk-header-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.kiosk-header-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.kiosk-header-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 3px rgba(46, 158, 91, 0.25);
+}
+.kiosk-header-dot.offline {
+  background: var(--danger);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.25);
+}

@@ -267,35 +267,35 @@ export default function App() {
       {step === "welcome" && <WelcomeScreen onManualEntry={() => setStep("manual")} />}
 
       {step === "manual" && (
-        <ManualEntryScreen onSubmit={handleManualSubmit} onCancel={resetSession} />
+        <ManualEntryScreen onSubmit={handleManualSubmit} onCancel={resetSession} isOnline={isOnline} />
       )}
 
       {step === "confirm" && (
-        <ConfirmScreen student={student} onConfirm={handleConfirmYes} onNotMe={handleConfirmNo} />
+        <ConfirmScreen student={student} onConfirm={handleConfirmYes} onNotMe={handleConfirmNo} isOnline={isOnline} />
       )}
 
       {step === "service" && (
-        <ServiceSelectScreen onSelect={handleServiceSelect} onCancel={resetSession} />
+        <ServiceSelectScreen onSelect={handleServiceSelect} onCancel={resetSession} isOnline={isOnline} />
       )}
 
       {step === "consultationType" && (
-        <ConsultationTypeScreen onSelect={handleConsultTypeSelect} onBack={() => setStep("service")} />
+        <ConsultationTypeScreen onSelect={handleConsultTypeSelect} onBack={() => setStep("service")} isOnline={isOnline} />
       )}
 
       {step === "otherServicesType" && (
-        <OtherServicesTypeScreen onSelect={handleOtherServiceTypeSelect} onBack={() => setStep("service")} />
+        <OtherServicesTypeScreen onSelect={handleOtherServiceTypeSelect} onBack={() => setStep("service")} isOnline={isOnline} />
       )}
 
       {step === "requestText" && (
-        <RequestTextScreen onSubmit={handleRequestTextSubmit} onBack={() => setStep("otherServicesType")} />
+        <RequestTextScreen onSubmit={handleRequestTextSubmit} onBack={() => setStep("otherServicesType")} isOnline={isOnline} />
       )}
 
       {step === "checkedIn" && (
-        <CheckedInScreen info={checkInInfo} onDone={resetSession} />
+        <CheckedInScreen info={checkInInfo} onDone={resetSession} isOnline={isOnline} />
       )}
 
       {step === "screeningOptions" && (
-        <ScreeningOptionsScreen onSelect={handleScreeningOptionSelect} onBack={() => setStep("service")} />
+        <ScreeningOptionsScreen onSelect={handleScreeningOptionSelect} onBack={() => setStep("service")} isOnline={isOnline} />
       )}
 
       {step === "capturing" && (
@@ -305,11 +305,12 @@ export default function App() {
           isMock={isMock}
           bridge={bridgeRef.current}
           onCancel={resetSession}
+          isOnline={isOnline}
         />
       )}
 
       {step === "result" && (
-        <ResultScreen readings={readings} overrideTriggered={overrideTriggered} queueNumber={resultQueueNumber} onDone={resetSession} />
+        <ResultScreen readings={readings} overrideTriggered={overrideTriggered} queueNumber={resultQueueNumber} onDone={resetSession} isOnline={isOnline} />
       )}
     </div>
   );

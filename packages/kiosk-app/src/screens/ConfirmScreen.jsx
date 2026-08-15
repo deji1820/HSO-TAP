@@ -1,30 +1,45 @@
+import KioskHeader from "../components/KioskHeader.jsx";
+import "../styles/screens/Confirm.css";
+
 // Matches PDF screen: "Step 1 of 2: Identity Verification" — shown right
 // after a successful RFID tap or Manual Entry lookup, before service
 // selection (which the PDF labels "Step 2 of 2", see ServiceSelectScreen).
-//
-// ASSUMPTION (flag for review against the actual mockup): field names below
-// (firstName, lastName, course, yearLevel, studentId) follow the shape used
-// by scripts/seedStudent.js. Adjust if the real /students/lookup response
-// uses different keys.
-export default function ConfirmScreen({ student, onConfirm, onNotMe }) {
+export default function ConfirmScreen({ student, onConfirm, onNotMe, isOnline }) {
   const fullName = [student?.firstName, student?.lastName].filter(Boolean).join(" ") || "Unknown Student";
 
   return (
-    <div className="screen confirm-screen">
-      <p className="step-label">Step 1 of 2: Identity Verification</p>
-      <h1>Is this your profile?</h1>
+    <div className="kiosk-shell">
+      <KioskHeader isOnline={isOnline} />
 
-      <div className="profile-icon" />
+      <div className="kiosk-content">
+        <p className="kiosk-eyebrow">Step 1 of 2: Identity Verification</p>
+        <h1>Is this your profile?</h1>
 
-      <div className="profile-card">
-        <h2>{fullName}</h2>
-        <p>Student ID: {student?.studentId ?? "—"}</p>
-        {student?.program && <p>{student.program}</p>}
-        {student?.yearLevel && <p>{student.yearLevel}</p>}
+        <div className="confirm-card">
+          <h2 className="confirm-name">{fullName}</h2>
+          <p className="confirm-id">{student?.studentId ?? "—"}</p>
+
+          <div className="confirm-divider" />
+
+          <div className="confirm-detail-row">
+            <span className="confirm-detail-label">Program:</span>
+            <span className="confirm-detail-value">{student?.program ?? "—"}</span>
+          </div>
+          <div className="confirm-detail-row">
+            <span className="confirm-detail-label">Year Level:</span>
+            <span className="confirm-detail-value">{student?.yearLevel ?? "—"}</span>
+          </div>
+        </div>
+
+        <div className="confirm-actions">
+          <button className="btn-kiosk confirm-btn confirm-btn-no" onClick={onNotMe}>
+            ✕ No, Cancel
+          </button>
+          <button className="btn-kiosk confirm-btn confirm-btn-yes" onClick={onConfirm}>
+            Yes, Proceed →
+          </button>
+        </div>
       </div>
-
-      <button onClick={onConfirm}>Yes, this is me</button>
-      <button onClick={onNotMe}>No, that's not me</button>
     </div>
   );
 }

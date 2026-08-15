@@ -1,0 +1,27 @@
+.welcome-icon-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid var(--nu-blue);
+  color: var(--nu-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 36px;
+}
+
+.welcome-tap-label {
+  color: var(--nu-blue);
+  font-size: 1.3rem;
+  margin: 0 0 8px;
+}
+
+.welcome-tap-hint {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 44px;
+}
+
+.welcome-manual-btn {
+  max-width: 460px;
+}

@@ -1,15 +1,8 @@
 import { useState } from "react";
+import KioskHeader from "../components/KioskHeader.jsx";
+import "../styles/screens/RequestText.css";
 
-// Shown after choosing a sub-type on OtherServicesTypeScreen. Captures the
-// student's request as free text before submitting.
-//
-// ASSUMPTION (flag for review against the actual mockup): this relies on the
-// touchscreen's OS-level virtual keyboard popping up on focus, rather than a
-// custom on-screen QWERTY keyboard like the numeric keypad built for Manual
-// Entry. If the PDF mockup shows a custom keyboard instead, this will need
-// to be swapped for one (same pattern as ManualEntryScreen's keypad, just
-// with letters).
-export default function RequestTextScreen({ onSubmit, onBack }) {
+export default function RequestTextScreen({ onSubmit, onBack, isOnline }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -22,8 +15,6 @@ export default function RequestTextScreen({ onSubmit, onBack }) {
     setError(null);
     try {
       await onSubmit(text.trim());
-      // On success the parent moves on to the "checked in" step, so this
-      // component unmounts — no need to clear loading here.
     } catch {
       setError("Something went wrong submitting your request. Please try again or see the front desk.");
       setLoading(false);
@@ -31,29 +22,35 @@ export default function RequestTextScreen({ onSubmit, onBack }) {
   }
 
   return (
-    <div className="screen request-text-screen">
-      <h1>Tell us what you need</h1>
-      <p>Briefly describe your request (e.g. medicine name, or the document you need).</p>
+    <div className="kiosk-shell">
+      <KioskHeader isOnline={isOnline} />
 
-      <textarea
-        className="request-textarea"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Type here..."
-        rows={4}
-        disabled={loading}
-        autoFocus
-      />
+      <div className="kiosk-content">
+        <h1>Tell us what you need</h1>
+        <p className="kiosk-subtitle">Briefly describe your request (e.g. medicine name, or the document you need).</p>
 
-      {error && <p className="error-text">{error}</p>}
-      {loading && <p>Submitting…</p>}
+        <textarea
+          className="request-textarea"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Type here..."
+          rows={4}
+          disabled={loading}
+          autoFocus
+        />
 
-      <button onClick={handleContinue} disabled={!canSubmit}>
-        Continue
-      </button>
-      <button onClick={onBack} disabled={loading}>
-        Back
-      </button>
+        {error && <p className="manual-entry-error">{error}</p>}
+        {loading && <p className="manual-entry-loading">Submitting…</p>}
+
+        <div className="request-text-actions">
+          <button className="btn-kiosk btn-kiosk-muted" onClick={onBack} disabled={loading}>
+            Back
+          </button>
+          <button className="btn-kiosk btn-kiosk-primary request-text-continue" onClick={handleContinue} disabled={!canSubmit}>
+            Continue
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

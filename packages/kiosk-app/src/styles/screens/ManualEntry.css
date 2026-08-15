@@ -1,0 +1,127 @@
+.manual-entry-card {
+  width: 100%;
+  max-width: 460px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 34px rgba(16, 30, 60, 0.12);
+  overflow: hidden;
+  text-align: left;
+}
+
+.manual-entry-titlebar {
+  background: var(--nu-blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.manual-entry-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.manual-entry-close:hover:not(:disabled) { background: rgba(255, 255, 255, 0.15); }
+.manual-entry-close:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.manual-entry-body { padding: 26px 28px 30px; }
+
+.manual-entry-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.field-label-kiosk {
+  font-weight: 700;
+  color: var(--nu-blue-dark);
+  font-size: 0.95rem;
+}
+
+.manual-entry-format-badge {
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.id-display {
+  background: #eef1f6;
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.manual-entry-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: -8px 0 16px;
+}
+.manual-entry-loading {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: -8px 0 16px;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.keypad-key {
+  background: #eef1f6;
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+.keypad-key:active { transform: scale(0.96); }
+.keypad-key:disabled { opacity: 0.5; cursor: not-allowed; }
+.keypad-key:hover:not(:disabled) { opacity: 0.85; }
+
+.keypad-key-danger {
+  background: #fbdcda;
+  color: var(--danger);
+}
+.keypad-key-warning {
+  background: #fdf0c2;
+  color: #a97a08;
+  font-size: 0.85rem;
+}
+
+.manual-entry-actions {
+  display: flex;
+  gap: 12px;
+}
+.manual-entry-cancel,
+.manual-entry-confirm {
+  flex: 1;
+  width: auto;
+  padding: 14px 0;
+  font-size: 0.95rem;
+}
