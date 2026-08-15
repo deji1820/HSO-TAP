@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/Layout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import EMRPage from "./pages/EMRPage.jsx";
@@ -24,63 +25,61 @@ export default function App() {
     setUser(null);
   }
 
+  const routes = (
+    <Routes>
+      <Route path="/login" element={<LoginPage onLoggedIn={setUser} />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute user={user}>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/emr"
+        element={
+          <ProtectedRoute user={user}>
+            <EMRPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute user={user}>
+            <AnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/forms"
+        element={
+          <ProtectedRoute user={user}>
+            <FormsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute user={user}>
+            <AdminPage />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
+  );
+
   return (
     <BrowserRouter>
-      {user && (
-        <nav>
-          <Link to="/">Dashboard</Link>
-          <Link to="/emr">EMR</Link>
-          <Link to="/analytics">Data Analytics</Link>
-          <Link to="/forms">Forms</Link>
-          {user.role === "admin" && <Link to="/admin">Admin</Link>}
-          <span style={{ float: "right" }}>
-            {user.name} ({user.role}) <button onClick={handleLogout}>Logout</button>
-          </span>
-        </nav>
+      {user ? (
+        <Layout user={user} onLogout={handleLogout}>
+          {routes}
+        </Layout>
+      ) : (
+        routes
       )}
-      <Routes>
-        <Route path="/login" element={<LoginPage onLoggedIn={setUser} />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute user={user}>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/emr"
-          element={
-            <ProtectedRoute user={user}>
-              <EMRPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/analytics"
-          element={
-            <ProtectedRoute user={user}>
-              <AnalyticsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/forms"
-          element={
-            <ProtectedRoute user={user}>
-              <FormsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute user={user}>
-              <AdminPage />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
     </BrowserRouter>
   );
 }

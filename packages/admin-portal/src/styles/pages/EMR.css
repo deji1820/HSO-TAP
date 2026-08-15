@@ -1,0 +1,77 @@
+.emr-search {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.emr-search .text-input { flex: 1; }
+
+.emr-results-wrap { margin-bottom: 22px; }
+
+/* ---------- Detail card shell ---------- */
+.emr-detail-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.emr-detail-bar {
+  background: var(--nu-blue);
+  color: #fff;
+  font-weight: 700;
+  font-style: italic;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.emr-detail-card .patient-info-block { margin: 16px 20px 0; }
+.emr-detail-card .emr-segmented-tabs { margin: 16px 20px 0; }
+.emr-tab-content { padding: 16px 20px 20px; }
+
+/* ---------- Consultation History accordion ---------- */
+.consultation-list { display: flex; flex-direction: column; gap: 0; padding: 4px; }
+
+.consultation-entry { border-bottom: 1px solid var(--border); }
+.consultation-entry:last-child { border-bottom: none; }
+
+.consultation-entry-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--nu-blue-dark);
+}
+.consultation-entry-header:hover { background: var(--bg-page); }
+
+.consultation-caret {
+  display: inline-block;
+  transition: transform .15s ease;
+  color: var(--nu-blue-dark);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+.consultation-caret.open { transform: rotate(90deg); }
+
+.consultation-entry-date { font-weight: 700; min-width: 220px; }
+.consultation-entry-type { flex: 1; }
+.consultation-entry-staff { color: var(--text-secondary); }
+
+.consultation-entry-body {
+  margin: 0 0 14px;
+  padding: 0 10px 0 40px;
+  list-style: disc;
+  font-size: 0.86rem;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

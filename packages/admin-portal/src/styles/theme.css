@@ -1,0 +1,112 @@
+/* src/styles/theme.css
+   NU Fairview design tokens + shared component classes.
+   Import this ONCE in main.jsx, before login.css. */
+
+:root {
+  /* Brand colors (sampled from the PDF mockups) */
+  --nu-blue-dark: #0a2a63;   /* sidebar / header */
+  --nu-blue: #0f3f96;        /* primary buttons, links */
+  --nu-blue-light: #e8edf8;  /* selected row / soft highlight */
+  --nu-gold: #f6c744;        /* active nav item, accents */
+  --nu-gold-dark: #d9a913;
+
+  --bg-page: #eef0f3;
+  --bg-card: #ffffff;
+  --border: #dfe3ea;
+
+  --text-primary: #1c2b4a;
+  --text-secondary: #5b6b85;
+  --text-muted: #8b96a8;
+
+  --danger: #d64545;
+  --danger-bg: #fdeceb;
+  --success: #2e9e5b;
+  --success-bg: #eaf7ef;
+  --warning: #e0a415;
+  --warning-bg: #fdf3dc;
+
+  --radius: 8px;
+  --radius-sm: 6px;
+  --shadow-card: 0 1px 3px rgba(16, 30, 60, 0.08);
+  --sidebar-w: 250px;
+  --topbar-h: 64px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+h1, h2, h3 { color: var(--nu-blue-dark); margin: 0 0 0.25rem; }
+
+a { color: inherit; }
+
+/* ---------- Layout shell ---------- */
+.app-shell { display: flex; min-height: 100vh; }
+.app-main { flex: 1; margin-left: var(--sidebar-w); display: flex; flex-direction: column; min-height: 100vh; }
+.app-content { padding: 24px 28px; flex: 1; }
+
+/* ---------- Page header ---------- */
+.page-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.page-header svg { color: var(--nu-blue-dark); }
+.page-subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-top: 2px; }
+
+/* ---------- Cards / stat cards ---------- */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 18px 20px;
+}
+
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 18px; }
+.stat-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-card); padding: 18px 20px; }
+.stat-card .stat-label { display: flex; align-items: center; gap: 8px; color: var(--nu-blue-dark); font-weight: 600; font-size: 0.95rem; }
+.stat-card .stat-value { font-size: 2.1rem; font-weight: 700; color: var(--text-primary); margin-top: 6px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; border-radius: var(--radius-sm);
+  padding: 9px 16px; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: opacity .15s ease;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.btn-primary { background: var(--nu-blue); color: #fff; }
+.btn-primary:hover:not(:disabled) { opacity: 0.9; }
+.btn-outline { background: #fff; color: var(--nu-blue); border: 1px solid var(--nu-blue); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); }
+.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+
+/* ---------- Tables ---------- */
+.table-wrap { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow-card); overflow: hidden; }
+table.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table.data-table th {
+  text-align: left; background: var(--nu-blue-light); color: var(--nu-blue-dark);
+  padding: 12px 16px; font-weight: 700; border-bottom: 2px solid var(--nu-blue-dark);
+}
+table.data-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+table.data-table tr:last-child td { border-bottom: none; }
+table.data-table tr:hover td { background: #f7f9fc; }
+.table-empty { padding: 32px; text-align: center; color: var(--text-muted); }
+
+/* ---------- Badges ---------- */
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; }
+.badge-high { background: var(--danger-bg); color: var(--danger); }
+.badge-standard { background: var(--warning-bg); color: var(--warning); }
+.badge-routine { background: var(--success-bg); color: var(--success); }
+.badge-active { background: var(--success-bg); color: var(--success); }
+
+/* ---------- Forms ---------- */
+.field-label { display: block; font-weight: 600; color: var(--nu-blue-dark); margin-bottom: 6px; font-size: 0.9rem; }
+.text-input, select.text-input, textarea.text-input {
+  width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-family: inherit; background: #fff;
+}
+.text-input:focus { outline: none; border-color: var(--nu-blue); }
+
+.error-text { color: var(--danger); font-size: 0.85rem; }

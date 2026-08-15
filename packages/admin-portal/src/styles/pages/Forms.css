@@ -1,0 +1,12 @@
+.stat-value .stat-suffix {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--success);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.section-title {
+  font-size: 1rem;
+  margin: 0 0 12px;
+}
